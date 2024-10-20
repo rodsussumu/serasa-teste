@@ -1,11 +1,15 @@
 package com.rodsussumu.experian.models;
 
+import com.rodsussumu.experian.indicator.RoleIndicator;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,7 +18,8 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+@Builder
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,5 +38,13 @@ public class User {
     )
     private Set<Role> roles;
 
-
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> listRole = new ArrayList<>();
+        for (Role role : this.roles) {
+            if (role.equals(RoleIndicator.ADMIN)) listRole.add(new SimpleGrantedAuthority(RoleIndicator.ADMIN.toString()));
+            else listRole.add(new SimpleGrantedAuthority(RoleIndicator.USER.toString()));
+        }
+        return listRole;
+    }
 }
