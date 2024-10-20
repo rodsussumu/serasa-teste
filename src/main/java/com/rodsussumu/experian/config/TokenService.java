@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.rodsussumu.experian.exceptions.InternalServerErrorException;
 import com.rodsussumu.experian.models.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,7 @@ public class TokenService {
 
         } catch(JWTCreationException exception){
             // Invalid Signing configuration / Couldn't convert Claims.
-            throw new InternalServerErrorException("Error Generating Token");
+            throw new RuntimeException("Error Generating Token");
         }
     }
 

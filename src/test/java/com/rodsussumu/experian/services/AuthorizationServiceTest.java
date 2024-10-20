@@ -2,9 +2,11 @@ package com.rodsussumu.experian.services;
 
 import com.rodsussumu.experian.models.User;
 import com.rodsussumu.experian.repositories.UserRepository;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -16,14 +18,16 @@ class AuthorizationServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @InjectMocks
+    private AuthorizationService authorizationService;
+
     @BeforeEach
     void setUp() {
-        // Inicializa os mocks
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void loadUserByUsername() {
+    void shouldGetUserDetails() {
         String usernameMock = "testUser";
         User mockUser = new User();
         mockUser.setUsername(usernameMock);
@@ -31,7 +35,7 @@ class AuthorizationServiceTest {
 
         Mockito.when(userRepository.findByUsername(usernameMock)).thenReturn(mockUser);
 
-        UserDetails user = userRepository.findByUsername(usernameMock);
+        UserDetails user = authorizationService.loadUserByUsername(usernameMock);
 
         Assertions.assertEquals(user, mockUser);
     }

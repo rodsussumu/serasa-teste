@@ -3,8 +3,6 @@ package com.rodsussumu.experian.services;
 import com.rodsussumu.experian.config.TokenService;
 import com.rodsussumu.experian.dtos.LoginRequestDTO;
 import com.rodsussumu.experian.dtos.LoginResponseDTO;
-import com.rodsussumu.experian.exceptions.InternalServerErrorException;
-import com.rodsussumu.experian.exceptions.ValidateException;
 import com.rodsussumu.experian.models.User;
 import com.rodsussumu.experian.repositories.UserRepository;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +10,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -41,7 +37,7 @@ public class AuthenticationService {
             UserDetails user = userRepository.findByUsername(loginRequestDTO.username());
 
             if(Objects.isNull(user)) {
-                throw new ValidateException("Username or password is invalid!");
+                throw new BadCredentialsException("Username or password is invalid!");
             }
 
             String token = tokenService.generateToken((User) authentication.getPrincipal());
@@ -50,9 +46,7 @@ public class AuthenticationService {
 
             return ResponseEntity.ok(loginResponseDTO);
         } catch (BadCredentialsException ex) {
-            throw new ValidateException("Username or password is invalid!");
-        } catch (Exception ex) {
-            throw new InternalServerErrorException("Internal Server Error");
+            throw new BadCredentialsException("Username or password is invalid!");
         }
     }
 }
