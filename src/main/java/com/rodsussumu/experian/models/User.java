@@ -42,8 +42,8 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> listRole = new ArrayList<>();
         for (Role role : this.roles) {
-            if (RoleIndicator.ADMIN.toString().equals(role.getName())) listRole.add(new SimpleGrantedAuthority(RoleIndicator.ADMIN.toString()));
-            else listRole.add(new SimpleGrantedAuthority(RoleIndicator.USER.toString()));
+            if (RoleIndicator.ADMIN.toString().equals(role.getName())) listRole.add(new SimpleGrantedAuthority("ROLE_" + RoleIndicator.ADMIN.toString()));
+            else listRole.add(new SimpleGrantedAuthority("ROLE_" + RoleIndicator.USER.toString()));
         }
         return listRole;
     }

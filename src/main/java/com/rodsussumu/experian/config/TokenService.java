@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.rodsussumu.experian.models.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -16,7 +17,7 @@ public class TokenService {
     @Value("${security.token}")
     private String secretKey;
 
-    private static final int EXPIRES_IN = 600;
+    private static final int EXPIRES_IN = 6000;
 
     public String generateToken(User user) {
         try {
@@ -40,13 +41,14 @@ public class TokenService {
     public String validateToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
+
             return JWT.require(algorithm)
                     .withIssuer("backend-app")
                     .build()
                     .verify(token)
                     .getSubject();
         } catch(JWTVerificationException exception) {
-            return "";
+            throw new BadCredentialsException("Invalid token");
         }
     }
 }
