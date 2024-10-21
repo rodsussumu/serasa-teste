@@ -4,6 +4,8 @@ import com.rodsussumu.experian.dtos.AuthorAddRequestDTO;
 import com.rodsussumu.experian.dtos.AuthorResponseDTO;
 import com.rodsussumu.experian.dtos.AuthorResponseList;
 import com.rodsussumu.experian.services.AuthorService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.Table;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/author")
+@Tag(name = "author")
 public class AuthorController {
     private AuthorService authorService;
 

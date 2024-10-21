@@ -21,7 +21,6 @@ class TokenServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        // Injetando a chave secreta no tokenService manualmente
         ReflectionTestUtils.setField(tokenService, "secretKey", "secret-token");
     }
 
@@ -39,28 +38,22 @@ class TokenServiceTest {
 
     @Test
     void shouldValidateToken() {
-        // Arrange
         User user = User.builder()
                 .username("testUser")
                 .build();
         String token = tokenService.generateToken(user);
 
-        // Act
         String username = tokenService.validateToken(token);
 
-        // Assert
         assertEquals("testUser", username);
     }
 
     @Test
     void shouldReturnEmptyStringWhenTokenIsInvalid() {
-        // Arrange
         String invalidToken = "invalid.token";
 
-        // Act
         String username = tokenService.validateToken(invalidToken);
 
-        // Assert
         assertTrue(username.isEmpty());
     }
 

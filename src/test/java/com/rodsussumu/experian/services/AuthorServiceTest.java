@@ -155,12 +155,10 @@ class AuthorServiceTest {
 
     @Test
     void shouldThrowExceptionWhenAuthorNotFoundById() {
-        // Arrange
         Long authorId = 1L;
 
         Mockito.when(authorRepository.findById(authorId)).thenReturn(Optional.empty());
 
-        // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> authorService.listById(authorId));
 
         Mockito.verify(authorRepository, Mockito.times(1)).findById(authorId);

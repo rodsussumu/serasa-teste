@@ -63,10 +63,8 @@ class SecurityFilterTest {
         Mockito.when(tokenService.validateToken(token)).thenReturn(username);
         Mockito.when(userRepository.findByUsername(username)).thenReturn(userDetails);
 
-        // Act
         securityFilter.doFilterInternal(request, response, filterChain);
 
-        // Assert
         Assertions.assertNotNull(SecurityContextHolder.getContext().getAuthentication());
         Mockito.verify(filterChain, Mockito.times(1)).doFilter(request, response);
     }
@@ -87,14 +85,11 @@ class SecurityFilterTest {
 
     @Test
     void shouldNotAuthenticateWhenAuthorizationEmpty() throws ServletException, IOException {
-        // Arrange
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
 
-        // Act
         securityFilter.doFilterInternal(request, response, filterChain);
 
-        // Assert
         Assertions.assertNull(SecurityContextHolder.getContext().getAuthentication());
         Mockito.verify(filterChain, Mockito.times(1)).doFilter(request, response);
     }

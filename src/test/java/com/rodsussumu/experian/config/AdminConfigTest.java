@@ -38,7 +38,6 @@ class AdminConfigTest {
 
     @Test
     void shouldCreateAdminIfAdminNotRegistered() throws Exception {
-        // Arrange
         Role adminRole = new Role();
         adminRole.setName(RoleIndicator.ADMIN.toString());
 
@@ -53,16 +52,13 @@ class AdminConfigTest {
         Mockito.when(userRepository.findByUsername("user")).thenReturn(null);
         Mockito.when(bCryptPasswordEncoder.encode("1234")).thenReturn("encoded-password");
 
-        // Act
         adminConfig.run();
 
-        // Assert
         Mockito.verify(userRepository, Mockito.times(2)).save(Mockito.any(User.class));
     }
 
     @Test
     void shouldNotCreateAdminIfAdminRegistered() throws Exception {
-        // Arrange
         Role adminRole = new Role();
         adminRole.setName(RoleIndicator.ADMIN.name());
 
@@ -86,10 +82,8 @@ class AdminConfigTest {
 
         Mockito.when(roleRepository.findByName(RoleIndicator.USER.name())).thenReturn(basicRole);
         Mockito.when(userRepository.findByUsername("user")).thenReturn(existingBasicUser);
-        // Act
         adminConfig.run();
 
-        // Assert
         Mockito.verify(userRepository, Mockito.never()).save(Mockito.any(User.class));
     }
 
