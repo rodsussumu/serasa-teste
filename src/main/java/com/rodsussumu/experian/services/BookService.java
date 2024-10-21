@@ -1,13 +1,14 @@
 package com.rodsussumu.experian.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rodsussumu.experian.dtos.BookCreateRequestDTO;
-import com.rodsussumu.experian.dtos.BookListResponseDTO;
+import com.rodsussumu.experian.dtos.*;
 import com.rodsussumu.experian.models.Author;
 import com.rodsussumu.experian.models.Book;
 import com.rodsussumu.experian.repositories.BookRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class BookService {
@@ -28,13 +29,40 @@ public class BookService {
                 .author(author)
                 .genre(bookCreateRequestDTO.genre())
                 .title(bookCreateRequestDTO.title())
-                .releaseYear(bookCreateRequestDTO.release_year())
+                .release(bookCreateRequestDTO.release_year())
                 .build();
 
         bookRepository.save(book);
 
-        BookListResponseDTO responseMap = objectMapper.convertValue(book, BookListResponseDTO.class);
+        BookAuthorResponseDTO responseMap = objectMapper.convertValue(author, BookAuthorResponseDTO.class);
 
-        return ResponseEntity.ok(responseMap);
+
+        BookListResponseDTO responseDTO = new BookListResponseDTO(
+                book.getId(),
+                book.getGenre(),
+                book.getRelease(),
+                book.getTitle(),
+                responseMap
+        );
+
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    public ResponseEntity<List<BookListResponseDTO>> listAll() {
+        List<Book> books = bookRepository.findAll();
+
+        List<BookListResponseDTO> postDtoList = books.stream().map(book -> {
+            BookAuthorResponseDTO authorDTO = objectMapper.convertValue(book.getAuthor(), BookAuthorResponseDTO.class);
+            return new BookListResponseDTO(
+                    book.getId(),
+                    book.getGenre(),
+                    book.getRelease(),
+                    book.getTitle(),
+                    authorDTO
+            );
+        }).toList();
+
+        return ResponseEntity.ok(postDtoList);
+
     }
 }

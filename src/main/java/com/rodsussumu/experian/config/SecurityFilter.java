@@ -38,14 +38,7 @@ public class SecurityFilter extends OncePerRequestFilter {
                 if (user != null) {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-
                     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-                    if (auth != null) {
-                        System.out.println("Authenticated user: " + auth.getName());
-                        System.out.println("Authorities: " + auth.getAuthorities());
-                    } else {
-                        System.out.println("No user is authenticated");
-                    }
                 }
             }
         }

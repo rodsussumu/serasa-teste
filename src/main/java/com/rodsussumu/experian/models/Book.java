@@ -1,6 +1,7 @@
 package com.rodsussumu.experian.models;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,9 +24,10 @@ public class Book {
     private String genre;
 
     @Column(name = "release_year")
-    private String releaseYear;
+    private String release;
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
+    @JsonBackReference
     private Author author;
 }

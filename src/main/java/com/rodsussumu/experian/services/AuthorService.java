@@ -35,7 +35,7 @@ public class AuthorService {
 
         authorRepository.save(newAuthor);
 
-        return ResponseEntity.ok(new AuthorResponseDTO(newAuthor.getName(), newAuthor.getNationality()));
+        return ResponseEntity.ok(new AuthorResponseDTO(newAuthor.getName(), newAuthor.getNationality(), null));
     }
 
     public ResponseEntity<List<AuthorResponseList>> listAllAuthor() {
@@ -67,8 +67,8 @@ public class AuthorService {
     }
 
     public Author listById(Long id) {
-       return authorRepository.findById(id)
+       Author author =  authorRepository.findById(id)
                .orElseThrow(() -> new IllegalArgumentException("Author not found with id: " + id));
-
+       return author;
     }
 }
