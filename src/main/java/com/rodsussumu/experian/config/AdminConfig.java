@@ -17,6 +17,8 @@ import java.util.Set;
 @Configuration
 public class AdminConfig implements CommandLineRunner {
     private static final String ADMIN_USER = "admin";
+    private static final String BASIC_USER = "user";
+
 
     private RoleRepository roleRepository;
     private UserRepository userRepository;
@@ -31,7 +33,7 @@ public class AdminConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Role role = roleRepository.findByName(RoleIndicator.ADMIN.name());
+        Role role = roleRepository.findByName(RoleIndicator.ADMIN.toString());
 
         UserDetails userAdmin = userRepository.findByUsername(ADMIN_USER);
 
@@ -45,6 +47,22 @@ public class AdminConfig implements CommandLineRunner {
             System.out.println("Admin criado com sucesso!");
         } else {
             System.out.println("Admin já cadastrado");
+        }
+
+        Role roleUser = roleRepository.findByName(RoleIndicator.USER.toString());
+
+        UserDetails basicUser = userRepository.findByUsername(BASIC_USER);
+
+        if(Objects.isNull(basicUser)) {
+            User user = User.builder()
+                    .username(BASIC_USER)
+                    .password(bCryptPasswordEncoder.encode("1234"))
+                    .roles(Set.of(roleUser))
+                    .build();
+            userRepository.save(user);
+            System.out.println("Usuário básico criado com sucesso!");
+        } else {
+            System.out.println("Usuário básico já cadastrado");
         }
     }
 }

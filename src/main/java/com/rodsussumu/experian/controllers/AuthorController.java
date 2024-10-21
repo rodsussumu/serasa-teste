@@ -3,7 +3,6 @@ package com.rodsussumu.experian.controllers;
 import com.rodsussumu.experian.dtos.AuthorAddRequestDTO;
 import com.rodsussumu.experian.dtos.AuthorResponseDTO;
 import com.rodsussumu.experian.dtos.AuthorResponseList;
-import com.rodsussumu.experian.models.Author;
 import com.rodsussumu.experian.services.AuthorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

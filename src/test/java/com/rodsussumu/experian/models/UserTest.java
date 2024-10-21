@@ -24,7 +24,7 @@ class UserTest {
 
         user.setRoles(Set.of(role));
 
-        List<SimpleGrantedAuthority> listRole = new ArrayList<>(Collections.singleton(new SimpleGrantedAuthority(RoleIndicator.ADMIN.toString())));
+        List<SimpleGrantedAuthority> listRole = new ArrayList<>(Collections.singleton(new SimpleGrantedAuthority("ROLE_" + RoleIndicator.ADMIN.name())));
         Assertions.assertEquals(user.getAuthorities(), listRole);
     }
 
@@ -39,7 +39,7 @@ class UserTest {
 
         user.setRoles(Set.of(role));
 
-        List<SimpleGrantedAuthority> listRole = new ArrayList<>(Collections.singleton(new SimpleGrantedAuthority(RoleIndicator.USER.toString())));
+        List<SimpleGrantedAuthority> listRole = new ArrayList<>(Collections.singleton(new SimpleGrantedAuthority("ROLE_" +RoleIndicator.USER.toString())));
         Assertions.assertEquals(user.getAuthorities(), listRole);
     }
 }

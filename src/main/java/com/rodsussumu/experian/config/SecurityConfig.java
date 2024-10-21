@@ -29,9 +29,12 @@ public class SecurityConfig {
         httpSecurity
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-//                        .requestMatchers(HttpMethod.POST, "/author").hasRole("ADMIN")
-                        .requestMatchers("/author").hasAnyRole("ADMIN")
-                        .requestMatchers("/book").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/author").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/author").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/author").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/book").hasRole("ADMIN")
+                        .requestMatchers("/author").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/book").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
