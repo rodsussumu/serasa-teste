@@ -15,7 +15,7 @@
 ![Screenshot_130](https://github.com/user-attachments/assets/ce158cc4-cc3d-4e3b-af3c-b9b138309e64)
 
 ## Executando o projeto
-* Execute docker-compose up --build`
+* Execute `docker-compose up --build`
 * Ou possuir o PostgreSQL instalado na máquina e realizar a alteração das variaveis no application.properties
 
 ## Swagger/Actuator
