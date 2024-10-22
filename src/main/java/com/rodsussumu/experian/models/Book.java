@@ -23,6 +23,8 @@ public class Book {
 
     private String genre;
 
+    private int quantity;
+
     @Column(name = "release_year")
     private String release;
 

@@ -8,6 +8,7 @@ import com.rodsussumu.experian.dtos.BookListResponseDTO;
 import com.rodsussumu.experian.models.Author;
 import com.rodsussumu.experian.models.Book;
 import com.rodsussumu.experian.repositories.BookRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,9 +45,10 @@ class BookServiceTest {
         Long authorId = 1L;
         String genre = "Drama";
         String title = "Livro teste";
+        int quantity = 1;
         String releaseYear = "2024";
 
-        BookCreateRequestDTO bookCreateRequestDTO = new BookCreateRequestDTO(genre, releaseYear, title, authorId);
+        BookCreateRequestDTO bookCreateRequestDTO = new BookCreateRequestDTO(genre, releaseYear, title, quantity, authorId);
 
         Author author = new Author(authorId, "José", "Brasil", null);
 
@@ -55,6 +58,7 @@ class BookServiceTest {
                 .genre(genre)
                 .title(title)
                 .release(releaseYear)
+                .quantity(quantity)
                 .build();
 
         BookAuthorResponseDTO authorDTO = new BookAuthorResponseDTO(authorId, "José", "Brasil");
@@ -88,6 +92,7 @@ class BookServiceTest {
                 .genre("Drama")
                 .title("Livro 1")
                 .release("2023")
+                .quantity(1)
                 .build();
 
         Book book2 = Book.builder()
@@ -96,6 +101,7 @@ class BookServiceTest {
                 .genre("Terror")
                 .title("Livro 2")
                 .release("1994")
+                .quantity(1)
                 .build();
 
         List<Book> books = List.of(book1, book2);
@@ -108,6 +114,7 @@ class BookServiceTest {
                 book1.getGenre(),
                 book1.getRelease(),
                 book1.getTitle(),
+                book1.getQuantity(),
                 authorDTO1
         );
         BookListResponseDTO responseDTO2 = new BookListResponseDTO(
@@ -115,6 +122,7 @@ class BookServiceTest {
                 book2.getGenre(),
                 book2.getRelease(),
                 book2.getTitle(),
+                book2.getQuantity(),
                 authorDTO2
         );
 
@@ -129,5 +137,48 @@ class BookServiceTest {
         List<BookListResponseDTO> actualResponseList = response.getBody();
         assertNotNull(actualResponseList);
         assertEquals(2, actualResponseList.size());
+    }
+
+    @Test
+    void shouldUpdateQuantity() {
+        Long bookId = 1L;
+        int newQuantity = 10;
+
+        Book book = new Book();
+        book.setId(bookId);
+        book.setGenre("Drama");
+        book.setRelease("2024");
+        book.setTitle("Teste");
+        book.setQuantity(5);
+        book.setAuthor(new Author(1L, "Author", "Brasil", null));
+
+        BookAuthorResponseDTO authorDTO = new BookAuthorResponseDTO(1L, "Author", "Brasil");
+        BookListResponseDTO expectedResponse = new BookListResponseDTO(
+                bookId, "Drama", "2024", "Teste", newQuantity, authorDTO
+        );
+
+        Mockito.when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
+        Mockito.when(objectMapper.convertValue(book, BookListResponseDTO.class)).thenReturn(expectedResponse);
+
+        ResponseEntity<BookListResponseDTO> response = bookService.updateQuantity(bookId, newQuantity);
+
+        assertEquals(ResponseEntity.ok(expectedResponse), response);
+        assertEquals(newQuantity, book.getQuantity());
+        Mockito.verify(bookRepository, Mockito.times(1)).findById(bookId);
+        Mockito.verify(objectMapper, Mockito.times(1)).convertValue(book, BookListResponseDTO.class);
+    }
+
+    @Test
+    void testUpdateQuantityIfBookNotFound() {
+        Long bookId = 1L;
+        int newQuantity = 10;
+
+        Mockito.when(bookRepository.findById(bookId)).thenReturn(Optional.empty());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            bookService.updateQuantity(bookId, newQuantity);
+        });
+
+        assertEquals("Book not found with id: " + bookId, exception.getMessage());
     }
 }

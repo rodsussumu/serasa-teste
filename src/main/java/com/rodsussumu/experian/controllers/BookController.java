@@ -30,4 +30,9 @@ public class BookController {
     public ResponseEntity<List<BookListResponseDTO>> findAll() {
         return bookService.listAll();
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<BookListResponseDTO> updateQuantity(@RequestParam Long id, @RequestBody int quantity){
+        return bookService.updateQuantity(id, quantity);
+    }
 }

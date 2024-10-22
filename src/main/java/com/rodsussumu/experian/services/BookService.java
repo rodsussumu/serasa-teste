@@ -29,6 +29,7 @@ public class BookService {
                 .author(author)
                 .genre(bookCreateRequestDTO.genre())
                 .title(bookCreateRequestDTO.title())
+                .quantity(bookCreateRequestDTO.quantity())
                 .release(bookCreateRequestDTO.release_year())
                 .build();
 
@@ -42,6 +43,7 @@ public class BookService {
                 book.getGenre(),
                 book.getRelease(),
                 book.getTitle(),
+                book.getQuantity(),
                 responseMap
         );
 
@@ -58,11 +60,18 @@ public class BookService {
                     book.getGenre(),
                     book.getRelease(),
                     book.getTitle(),
+                    book.getQuantity(),
                     authorDTO
             );
         }).toList();
 
         return ResponseEntity.ok(postDtoList);
+    }
 
+    public ResponseEntity<BookListResponseDTO> updateQuantity(Long id, int quantity) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Book not found with id: " + id));
+        book.setQuantity(quantity);
+        BookListResponseDTO bookListResponseDTO = objectMapper.convertValue(book, BookListResponseDTO.class);
+        return ResponseEntity.ok(bookListResponseDTO);
     }
 }
