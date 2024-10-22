@@ -20,11 +20,11 @@ class UserTest {
         user.setPassword("1234");
 
         Role role = new Role();
-        role.setName("ADMIN");
+        role.setName("ROLE_ADMIN");
 
         user.setRoles(Set.of(role));
 
-        List<SimpleGrantedAuthority> listRole = new ArrayList<>(Collections.singleton(new SimpleGrantedAuthority("ROLE_" + RoleIndicator.ADMIN.name())));
+        List<SimpleGrantedAuthority> listRole = new ArrayList<>(Collections.singleton(new SimpleGrantedAuthority(RoleIndicator.ROLE_ADMIN.name())));
         Assertions.assertEquals(user.getAuthorities(), listRole);
     }
 
@@ -35,11 +35,11 @@ class UserTest {
         user.setPassword("1234");
 
         Role role = new Role();
-        role.setName("USER");
+        role.setName("ROLE_USER");
 
         user.setRoles(Set.of(role));
 
-        List<SimpleGrantedAuthority> listRole = new ArrayList<>(Collections.singleton(new SimpleGrantedAuthority("ROLE_" +RoleIndicator.USER.toString())));
+        List<SimpleGrantedAuthority> listRole = new ArrayList<>(Collections.singleton(new SimpleGrantedAuthority(RoleIndicator.ROLE_USER.name())));
         Assertions.assertEquals(user.getAuthorities(), listRole);
     }
 }

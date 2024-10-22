@@ -39,16 +39,16 @@ class AdminConfigTest {
     @Test
     void shouldCreateAdminIfAdminNotRegistered() throws Exception {
         Role adminRole = new Role();
-        adminRole.setName(RoleIndicator.ADMIN.toString());
+        adminRole.setName(RoleIndicator.ROLE_ADMIN.name());
 
         Role basicRole = new Role();
-        basicRole.setName(RoleIndicator.USER.toString());
+        basicRole.setName(RoleIndicator.ROLE_USER.name());
 
-        Mockito.when(roleRepository.findByName(RoleIndicator.ADMIN.name())).thenReturn(adminRole);
+        Mockito.when(roleRepository.findByName(RoleIndicator.ROLE_ADMIN.name())).thenReturn(adminRole);
         Mockito.when(userRepository.findByUsername("admin")).thenReturn(null);
         Mockito.when(bCryptPasswordEncoder.encode("1234")).thenReturn("encoded-password");
 
-        Mockito.when(roleRepository.findByName(RoleIndicator.USER.name())).thenReturn(basicRole);
+        Mockito.when(roleRepository.findByName(RoleIndicator.ROLE_USER.name())).thenReturn(basicRole);
         Mockito.when(userRepository.findByUsername("user")).thenReturn(null);
         Mockito.when(bCryptPasswordEncoder.encode("1234")).thenReturn("encoded-password");
 
@@ -60,10 +60,10 @@ class AdminConfigTest {
     @Test
     void shouldNotCreateAdminIfAdminRegistered() throws Exception {
         Role adminRole = new Role();
-        adminRole.setName(RoleIndicator.ADMIN.name());
+        adminRole.setName(RoleIndicator.ROLE_ADMIN.name());
 
         Role basicRole = new Role();
-        basicRole.setName(RoleIndicator.USER.toString());
+        basicRole.setName(RoleIndicator.ROLE_USER.name());
 
         UserDetails existingAdmin = org.springframework.security.core.userdetails.User
                 .withUsername("admin")
@@ -71,7 +71,7 @@ class AdminConfigTest {
                 .authorities(Collections.emptyList())
                 .build();
 
-        Mockito.when(roleRepository.findByName(RoleIndicator.ADMIN.name())).thenReturn(adminRole);
+        Mockito.when(roleRepository.findByName(RoleIndicator.ROLE_ADMIN.name())).thenReturn(adminRole);
         Mockito.when(userRepository.findByUsername("admin")).thenReturn(existingAdmin);
 
         UserDetails existingBasicUser = org.springframework.security.core.userdetails.User
@@ -80,7 +80,7 @@ class AdminConfigTest {
                 .authorities(Collections.emptyList())
                 .build();
 
-        Mockito.when(roleRepository.findByName(RoleIndicator.USER.name())).thenReturn(basicRole);
+        Mockito.when(roleRepository.findByName(RoleIndicator.ROLE_USER.name())).thenReturn(basicRole);
         Mockito.when(userRepository.findByUsername("user")).thenReturn(existingBasicUser);
         adminConfig.run();
 

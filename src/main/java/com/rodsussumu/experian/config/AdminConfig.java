@@ -33,7 +33,7 @@ public class AdminConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Role role = roleRepository.findByName(RoleIndicator.ADMIN.toString());
+        Role role = roleRepository.findByName(RoleIndicator.ROLE_ADMIN.name());
 
         UserDetails userAdmin = userRepository.findByUsername(ADMIN_USER);
 
@@ -49,7 +49,7 @@ public class AdminConfig implements CommandLineRunner {
             System.out.println("Admin já cadastrado");
         }
 
-        Role roleUser = roleRepository.findByName(RoleIndicator.USER.toString());
+        Role roleUser = roleRepository.findByName(RoleIndicator.ROLE_USER.name());
 
         UserDetails basicUser = userRepository.findByUsername(BASIC_USER);
 
